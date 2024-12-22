@@ -1,0 +1,6 @@
+services:
+  samplemt.service:
+    image: ${DOCKER_REGISTRY-}samplemtservice
+    build:
+      context: .
+      dockerfile: SampleMT.Service/Dockerfile
