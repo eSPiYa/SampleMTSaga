@@ -1,10 +1,10 @@
 ﻿namespace SampleMT.Service.Extensions
 {
-    public static class IServiceCollectionExtensions
+    internal static class IServiceCollectionExtensions
     {
-        public static void AddModulesByConfig(IServiceCollection services)
+        public static void AddModulesByConfig(this (IServiceCollection services, IConfiguration configuration) extend)
         {
-
+            
         }
     }
 }

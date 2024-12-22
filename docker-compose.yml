@@ -3,4 +3,6 @@ services:
     image: ${DOCKER_REGISTRY-}samplemtservice
     build:
       context: .
-      dockerfile: SampleMT.Service/Dockerfile
+      dockerfile: SampleMT.Service/Dockerfile    
+    environment:
+      Modules__0: "WebApi"
