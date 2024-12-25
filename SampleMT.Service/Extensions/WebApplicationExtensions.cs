@@ -1,5 +1,6 @@
 ﻿using SampleMT.Common.Enumerators;
 using SampleMT.Common.Extensions;
+using SampleMT.Common.Interfaces;
 using SampleMT.Common.Models;
 
 namespace SampleMT.Service.Extensions
@@ -15,17 +16,16 @@ namespace SampleMT.Service.Extensions
                     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
                 };
 
-                app.MapGet("/weatherforecast", () =>
+                app.MapGet("/weatherforecast", async (CancellationToken cancellationToken) =>
                 {
-                    var forecast = Enumerable.Range(1, 5).Select(index =>
-                        new WeatherForecast
-                        (
-                            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                            Random.Shared.Next(-20, 55),
-                            summaries[Random.Shared.Next(summaries.Length)]
-                        ))
-                        .ToArray();
-                    return forecast;
+                    IEnumerable<WeatherForecast> weatherForecast;
+                    using (var scope = app.Services.CreateScope())
+                    {
+                        var weatherForecastService = scope.ServiceProvider.GetRequiredService<IWeatherForecastService>();
+                        weatherForecast = await weatherForecastService.GetWeatherForecastsAsync();
+                    }
+                                        
+                    return weatherForecast;
                 })
                 .WithName("GetWeatherForecast")
                 .WithOpenApi();
