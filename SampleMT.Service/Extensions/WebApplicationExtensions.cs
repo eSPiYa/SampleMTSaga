@@ -1,4 +1,5 @@
-﻿using SampleMT.Service.Enumerators;
+﻿using SampleMT.Common.Enumerators;
+using SampleMT.Common.Extensions;
 using SampleMT.Service.Models;
 
 namespace SampleMT.Service.Extensions

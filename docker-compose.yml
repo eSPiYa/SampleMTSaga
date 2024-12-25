@@ -1,4 +1,15 @@
 services:
+  mtrabbitmq:
+    image: masstransit/rabbitmq:latest
+    ports:
+     - "5672:5672"
+     - "15672:15672"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+
   samplemt.service:
     image: ${DOCKER_REGISTRY-}samplemtservice
     build:
@@ -6,3 +17,10 @@ services:
       dockerfile: SampleMT.Service/Dockerfile    
     environment:
       Modules__0: "WebApi"
+      Modules__1__name: "MassTransit"
+      Modules__1__provider__name: "RabbitMQ"
+      Modules__1__provider__host: "mtrabbitmq"
+      Modules__1__provider__virtualHost: "/"
+      Modules__1__provider__user: "guest"
+      Modules__1__provider__password: "guest"
+      Modules__1__subModules__0: "Processor"

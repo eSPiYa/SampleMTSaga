@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SampleMT.MTransit": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
