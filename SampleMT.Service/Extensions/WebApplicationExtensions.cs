@@ -1,6 +1,6 @@
 ﻿using SampleMT.Common.Enumerators;
 using SampleMT.Common.Extensions;
-using SampleMT.Service.Models;
+using SampleMT.Common.Models;
 
 namespace SampleMT.Service.Extensions
 {
