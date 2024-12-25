@@ -1,17 +1,20 @@
-﻿using SampleMT.Common.Interfaces;
+﻿using MassTransit;
 using SampleMT.Common.Models;
+using SampleMT.MTransit.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SampleMT.Common.Services
+namespace SampleMT.MTransit.Consumers
 {
-    public class DefaultWeatherForecastService : IWeatherForecastService
+    internal class IRequestForecastsConsumer : IConsumer<IRequestForecasts>
     {
-        public Task<IEnumerable<WeatherForecast>> GetWeatherForecastsAsync(int days, CancellationToken ct)
+        public async Task Consume(ConsumeContext<IRequestForecasts> context)
         {
+            var days = context.Message.Days;
+
             var summaries = new[]
                 {
                     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -25,7 +28,12 @@ namespace SampleMT.Common.Services
                     summaries[Random.Shared.Next(summaries.Length)]
                 ));
 
-            return Task.FromResult(forecast);
+            await context.RespondAsync<IRequestForecastsResponse>(new
+            {
+                CorrelationId = context.Message.CorrelationId,
+                Forecasts = forecast
+            });
+
         }
     }
 }

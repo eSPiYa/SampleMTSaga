@@ -9,6 +9,6 @@ namespace SampleMT.Common.Interfaces
 {
     public interface IWeatherForecastService
     {
-        Task<IEnumerable<WeatherForecast>> GetWeatherForecastsAsync();
+        Task<IEnumerable<WeatherForecast>> GetWeatherForecastsAsync(int days, CancellationToken ct);
     }
 }

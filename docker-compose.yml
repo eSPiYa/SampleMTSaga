@@ -14,7 +14,10 @@ services:
     image: ${DOCKER_REGISTRY-}samplemtservice
     build:
       context: .
-      dockerfile: SampleMT.Service/Dockerfile    
+      dockerfile: SampleMT.Service/Dockerfile
+    depends_on:
+      mtrabbitmq:
+        condition: service_healthy
     environment:
       Modules__0: "WebApi"
       Modules__1__name: "MassTransit"

@@ -16,13 +16,13 @@ namespace SampleMT.Service.Extensions
                     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
                 };
 
-                app.MapGet("/weatherforecast", async (CancellationToken cancellationToken) =>
+                app.MapGet("/weatherforecast", async (CancellationToken cancellationToken, int days = 10) =>
                 {
                     IEnumerable<WeatherForecast> weatherForecast;
                     using (var scope = app.Services.CreateScope())
                     {
                         var weatherForecastService = scope.ServiceProvider.GetRequiredService<IWeatherForecastService>();
-                        weatherForecast = await weatherForecastService.GetWeatherForecastsAsync();
+                        weatherForecast = await weatherForecastService.GetWeatherForecastsAsync(days, cancellationToken);
                     }
                                         
                     return weatherForecast;

@@ -10,7 +10,7 @@ namespace SampleMT.Service.Extensions
     {
         public static void AddModulesByConfig(this (IServiceCollection services, IConfiguration configuration) extend)
         {
-            extend.services.AddScoped<IWeatherForecastService, DefaultWeatherForecastService>();
+            //extend.services.AddScoped<IWeatherForecastService, DefaultWeatherForecastService>();
 
             if (extend.configuration.IsModuleEnabled(ModulesEnumerator.MassTransit))
             {
