@@ -33,27 +33,26 @@ services:
       Modules__0__provider__user: "guest"
       Modules__0__provider__password: "guest"
       Modules__0__subModules__0: "Processor"
-      Modules__0__subModules__1: "RequestForecastsConsumer"
       Modules__1: "WebApi"
 
-  #samplemt.service.worker:
-  #  container_name: "samplemt.service.worker"
-  #  image: ${DOCKER_REGISTRY-}samplemtservice
-  #  build:
-  #    context: .
-  #    dockerfile: SampleMT.Service/Dockerfile
-  #  depends_on:
-  #    mtrabbitmq:
-  #      condition: service_healthy
-  #  healthcheck:
-  #    test: wget --no-verbose --tries=1 --spider http://localhost:80/healthz || exit 1
-  #    interval: 10s
-  #    timeout: 5s
-  #  environment:      
-  #    Modules__0__name: "MassTransit"
-  #    Modules__0__provider__name: "RabbitMQ"
-  #    Modules__0__provider__host: "mtrabbitmq"
-  #    Modules__0__provider__virtualHost: "/"
-  #    Modules__0__provider__user: "guest"
-  #    Modules__0__provider__password: "guest"
-  #    Modules__0__subModules__1: "RequestForecastsConsumer"
+  samplemt.service.worker:
+    container_name: "samplemt.service.worker"
+    image: ${DOCKER_REGISTRY-}samplemtservice
+    build:
+      context: .
+      dockerfile: SampleMT.Service/Dockerfile
+    depends_on:
+      mtrabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8080/healthz || exit 1
+      interval: 10s
+      timeout: 5s
+    environment:      
+      Modules__0__name: "MassTransit"
+      Modules__0__provider__name: "RabbitMQ"
+      Modules__0__provider__host: "mtrabbitmq"
+      Modules__0__provider__virtualHost: "/"
+      Modules__0__provider__user: "guest"
+      Modules__0__provider__password: "guest"
+      Modules__0__subModules__1: "RequestForecastsConsumer"

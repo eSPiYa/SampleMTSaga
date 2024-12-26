@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Microsoft.Extensions.Logging;
 using SampleMT.Common.Models;
 using SampleMT.MTransit.Messages;
 using System;
@@ -11,8 +12,17 @@ namespace SampleMT.MTransit.Consumers
 {
     internal class IRequestForecastsConsumer : IConsumer<IRequestForecasts>
     {
+        private readonly ILogger<IRequestForecastsConsumer> logger;
+
+        public IRequestForecastsConsumer(ILogger<IRequestForecastsConsumer> logger)
+        {
+            this.logger = logger;
+        }
+
         public async Task Consume(ConsumeContext<IRequestForecasts> context)
         {
+            this.logger.LogInformation($"Consuming request with CorrelationId of '{context.CorrelationId}'", context.Message);
+
             var days = context.Message.Days;
 
             var summaries = new[]
@@ -34,6 +44,7 @@ namespace SampleMT.MTransit.Consumers
                 Forecasts = forecast
             });
 
+            this.logger.LogInformation($"Responded to request with CorrelationId of '{context.CorrelationId}'");
         }
     }
 }
