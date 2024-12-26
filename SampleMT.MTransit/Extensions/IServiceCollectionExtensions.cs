@@ -32,7 +32,8 @@ namespace SampleMT.MTransit.Extensions
             {
                 x.SetKebabCaseEndpointNameFormatter();
 
-                x.AddConsumer(typeof(IRequestForecastsConsumer));
+                if (mtConfig.IsSubModuleEnabled(SubModulesEnumerator.RequestForecastsConsumer))
+                    x.AddConsumer(typeof(IRequestForecastsConsumer));
 
                 if (mtConfig!.IsUsedProvider(ProvidersEnumerator.RabbitMQ))
                 {

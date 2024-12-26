@@ -8,6 +8,7 @@ namespace SampleMT.MTransit.Enumerators
 {
     internal enum SubModulesEnumerator
     {
-        Processor
+        Processor,
+        RequestForecastsConsumer
     }
 }

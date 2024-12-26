@@ -1,7 +1,12 @@
 services:
-  samplemt.service:
+  samplemt.service.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
     ports:
       - "8080:8080"
+
+  #samplemt.service.worker:
+  #  environment:
+  #    - ASPNETCORE_ENVIRONMENT=Development
+  #    - ASPNETCORE_HTTP_PORTS=80

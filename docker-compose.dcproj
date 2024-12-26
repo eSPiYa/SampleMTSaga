@@ -7,7 +7,7 @@
     <ProjectGuid>1f7a8ea8-1b87-4d06-9ade-04b8c68bbf7f</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>samplemt.service</DockerServiceName>
+    <DockerServiceName>samplemt.service.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
