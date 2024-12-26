@@ -18,12 +18,16 @@ services:
     depends_on:
       mtrabbitmq:
         condition: service_healthy
-    environment:
-      Modules__0: "WebApi"
-      Modules__1__name: "MassTransit"
-      Modules__1__provider__name: "RabbitMQ"
-      Modules__1__provider__host: "mtrabbitmq"
-      Modules__1__provider__virtualHost: "/"
-      Modules__1__provider__user: "guest"
-      Modules__1__provider__password: "guest"
-      Modules__1__subModules__0: "Processor"
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8080/healthz || exit 1
+      interval: 10s
+      timeout: 5s
+    environment:      
+      Modules__0__name: "MassTransit"
+      Modules__0__provider__name: "RabbitMQ"
+      Modules__0__provider__host: "mtrabbitmq"
+      Modules__0__provider__virtualHost: "/"
+      Modules__0__provider__user: "guest"
+      Modules__0__provider__password: "guest"
+      Modules__0__subModules__0: "Processor"
+      Modules__1: "WebApi"
