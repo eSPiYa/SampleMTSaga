@@ -8,7 +8,9 @@ namespace SampleMT.MTransit.Enumerators
 {
     internal enum SubModulesEnumerator
     {
+        GetForecastMessageJobConsumer,
         Processor,
-        RequestForecastsConsumer
+        RequestForecastsConsumer,        
+        SagaStateMachine
     }
 }

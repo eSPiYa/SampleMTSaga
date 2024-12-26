@@ -33,6 +33,8 @@ services:
       Modules__0__provider__user: "guest"
       Modules__0__provider__password: "guest"
       Modules__0__subModules__0: "Processor"
+      Modules__0__subModules__1: "SagaStateMachine"
+      Modules__0__subModules__2: "GetForecastMessageJobConsumer"
       Modules__1: "WebApi"
 
   samplemt.service.worker:
@@ -57,4 +59,4 @@ services:
       Modules__0__provider__virtualHost: "/"
       Modules__0__provider__user: "guest"
       Modules__0__provider__password: "guest"
-      Modules__0__subModules__1: "RequestForecastsConsumer"
+      #Modules__0__subModules__1: "RequestForecastsConsumer"

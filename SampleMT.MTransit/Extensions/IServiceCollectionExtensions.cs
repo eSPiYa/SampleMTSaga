@@ -6,8 +6,10 @@ using SampleMT.Common.Extensions;
 using SampleMT.Common.Interfaces;
 using SampleMT.MTransit.Consumers;
 using SampleMT.MTransit.Enumerators;
+using SampleMT.MTransit.Messages;
 using SampleMT.MTransit.Models;
 using SampleMT.MTransit.Services;
+using SampleMT.MTransit.StateMachines.WeatherForecast;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +34,25 @@ namespace SampleMT.MTransit.Extensions
             {
                 x.SetKebabCaseEndpointNameFormatter();
 
+                x.SetInMemorySagaRepositoryProvider();
+
+                if (mtConfig.IsSubModuleEnabled(SubModulesEnumerator.GetForecastMessageJobConsumer))
+                    x.AddConsumer<IGetForecastMessageJobConsumer>(cfg =>
+                    {
+                        cfg.Options<JobOptions<IGetForecastMessage>>(options => options
+                            .SetJobTimeout(TimeSpan.FromMinutes(15))
+                            .SetConcurrentJobLimit(10));
+                    });
+
                 if (mtConfig.IsSubModuleEnabled(SubModulesEnumerator.RequestForecastsConsumer))
                     x.AddConsumer(typeof(IRequestForecastsConsumer));
+
+                if (mtConfig.IsSubModuleEnabled(SubModulesEnumerator.SagaStateMachine))
+                {
+                    x.AddSagaStateMachine<WeatherForecastStateMachine, WeatherForecastState>();
+
+                    x.AddJobSagaStateMachines();
+                }
 
                 if (mtConfig!.IsUsedProvider(ProvidersEnumerator.RabbitMQ))
                 {
