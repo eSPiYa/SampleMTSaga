@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHealthChecks();
+
 (builder.Services, builder.Configuration).AddModulesByConfig();
 
 var app = builder.Build();
@@ -19,6 +21,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.AddModulesByConfig();
+
+app.MapHealthChecks("/healthz");
 
 app.Run();
 
