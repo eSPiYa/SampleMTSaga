@@ -11,6 +11,15 @@ namespace SampleMT.MTransit.Extensions
 {
     internal static class IConfigurationSectionExtensions
     {
+        public static IConfigurationSection GetPersistenceProvider(this IConfigurationSection configSection)
+        {
+            var providerConfigSection = configSection.GetSection("persistence");
+
+            return providerConfigSection;
+        }
+
+        public static T GetPersistenceProvider<T>(this IConfigurationSection configSection) where T : class => configSection!.GetPersistenceProvider()!.Get<T>()!;
+
         public static IConfigurationSection GetProvider(this IConfigurationSection configSection)
         {
             var providerConfigSection = configSection.GetSection("provider");
@@ -19,6 +28,15 @@ namespace SampleMT.MTransit.Extensions
         }
 
         public static T GetProvider<T>(this IConfigurationSection configSection) where T : class => configSection!.GetProvider()!.Get<T>()!;
+
+        public static bool IsUsedPersistenceProvider(this IConfigurationSection configSection, PersistenceProviderEnumerator provider)
+        {
+            var providerName = provider.ToString();
+            var providerConfigSection = configSection.GetPersistenceProvider();
+            bool result = string.Equals(providerConfigSection.GetValue<string>("name"), providerName, StringComparison.InvariantCultureIgnoreCase);
+
+            return result;
+        }
 
         public static bool IsUsedProvider(this IConfigurationSection configSection, ProvidersEnumerator provider)
         {

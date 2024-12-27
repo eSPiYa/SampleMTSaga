@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Marten;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SampleMT.Common.Enumerators;
@@ -34,7 +35,19 @@ namespace SampleMT.MTransit.Extensions
             {
                 x.SetKebabCaseEndpointNameFormatter();
 
-                x.SetInMemorySagaRepositoryProvider();
+                if (mtConfig!.IsUsedPersistenceProvider(PersistenceProviderEnumerator.InMemory))
+                    x.SetInMemorySagaRepositoryProvider();
+                else if(mtConfig!.IsUsedPersistenceProvider(PersistenceProviderEnumerator.Marten))
+                {
+                    var provider = mtConfig!.GetPersistenceProvider<MartenPersistenceProvider>();
+
+                    extend.services.AddMarten(options =>
+                    {
+                        options.Connection(provider.ConnectionString);
+                    });
+
+                    x.SetMartenSagaRepositoryProvider();
+                }
 
                 if (mtConfig.IsSubModuleEnabled(SubModulesEnumerator.GetForecastMessageJobConsumer))
                     x.AddConsumer<IGetForecastMessageJobConsumer>(cfg =>
