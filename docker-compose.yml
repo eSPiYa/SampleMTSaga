@@ -33,9 +33,33 @@ services:
       Modules__0__provider__user: "guest"
       Modules__0__provider__password: "guest"
       Modules__0__subModules__0: "Processor"
-      Modules__0__subModules__1: "SagaStateMachine"
-      Modules__0__subModules__2: "GetForecastMessageJobConsumer"
+      #Modules__0__subModules__1: "SagaStateMachine"
+      #Modules__0__subModules__2: "GetForecastMessageJobConsumer"
       Modules__1: "WebApi"
+
+  samplemt.service.statemachine:
+    container_name: "samplemt.service.statemachine"
+    image: ${DOCKER_REGISTRY-}samplemtservice
+    build:
+      context: .
+      dockerfile: SampleMT.Service/Dockerfile
+    depends_on:
+      mtrabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8080/healthz || exit 1
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 10
+    environment:      
+      Modules__0__name: "MassTransit"
+      Modules__0__provider__name: "RabbitMQ"
+      Modules__0__provider__host: "mtrabbitmq"
+      Modules__0__provider__virtualHost: "/"
+      Modules__0__provider__user: "guest"
+      Modules__0__provider__password: "guest"
+      Modules__0__subModules__0: "SagaStateMachine"
 
   samplemt.service.worker:
     container_name: "samplemt.service.worker"
@@ -59,4 +83,5 @@ services:
       Modules__0__provider__virtualHost: "/"
       Modules__0__provider__user: "guest"
       Modules__0__provider__password: "guest"
+      Modules__0__subModules__0: "GetForecastMessageJobConsumer"
       #Modules__0__subModules__1: "RequestForecastsConsumer"

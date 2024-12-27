@@ -6,6 +6,11 @@ services:
     ports:
       - "8080:8080"
 
+  samplemt.service.statemachine:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+
   samplemt.service.worker:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

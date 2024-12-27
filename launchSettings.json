@@ -9,6 +9,7 @@
       "serviceActions": {
         "mtrabbitmq": "StartWithoutDebugging",
         "samplemt.service.api": "StartDebugging",
+        "samplemt.service.statemachine": "StartDebugging",
         "samplemt.service.worker": "StartDebugging"
       }
     }
