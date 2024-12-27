@@ -47,6 +47,8 @@ services:
     depends_on:
       mtrabbitmq:
         condition: service_healthy
+      postgres:
+        condition: service_healthy
       #samplemt.service.worker:
       #  condition: service_healthy
     healthcheck:
@@ -74,6 +76,8 @@ services:
     depends_on:
       mtrabbitmq:
         condition: service_healthy
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8080/healthz || exit 1
       interval: 10s
@@ -87,8 +91,9 @@ services:
       Modules__0__provider__virtualHost: "/"
       Modules__0__provider__user: "guest"
       Modules__0__provider__password: "guest"
-      Modules__0__persistence__name: "Marten"
-      Modules__0__persistence__connectionstring: "host=postgres;port=5432;database=postgres;username=postgres;password=P@ssw0rd;"
+      Modules__0__persistence__name: "InMemory"
+      #Modules__0__persistence__name: "Marten"
+      #Modules__0__persistence__connectionstring: "host=postgres;port=5432;database=postgres;username=postgres;password=P@ssw0rd;"
       Modules__0__subModules__0: "SagaStateMachine"
 
   samplemt.service.worker:

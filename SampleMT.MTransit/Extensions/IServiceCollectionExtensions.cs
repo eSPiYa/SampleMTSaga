@@ -1,5 +1,6 @@
 ﻿using Marten;
 using MassTransit;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SampleMT.Common.Enumerators;
@@ -17,6 +18,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SampleMT.MTransit.Extensions
 {
@@ -35,6 +37,13 @@ namespace SampleMT.MTransit.Extensions
             {
                 x.SetKebabCaseEndpointNameFormatter();
 
+                x.AddConfigureEndpointsCallback((context, name, cfg) =>
+                {
+                    cfg.UseDelayedRedelivery(r => r.Intervals(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(15), TimeSpan.FromSeconds(30)));
+                    cfg.UseMessageRetry(r => r.Immediate(5));
+                    cfg.UseInMemoryOutbox(context);
+                });
+
                 if (mtConfig!.IsUsedPersistenceProvider(PersistenceProviderEnumerator.InMemory))
                     x.SetInMemorySagaRepositoryProvider();
                 else if(mtConfig!.IsUsedPersistenceProvider(PersistenceProviderEnumerator.Marten))
@@ -46,7 +55,7 @@ namespace SampleMT.MTransit.Extensions
                         options.Connection(provider.ConnectionString);
                     });
 
-                    x.SetMartenSagaRepositoryProvider();
+                    x.SetMartenSagaRepositoryProvider(true);
                 }
 
                 if (mtConfig.IsSubModuleEnabled(SubModulesEnumerator.GetForecastMessageJobConsumer))
