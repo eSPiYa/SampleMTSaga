@@ -15,6 +15,7 @@ namespace SampleMT.MTransit.StateMachines.WeatherForecast
         public int Version { get; set; }
         public int Days { get; set; }
         public DateOnly StartDate { get; set; }
+        public IDictionary<Guid, bool> JobsList { get; private set; } = new Dictionary<Guid, bool>();
         public IList<Common.Models.WeatherForecast> WeatherForecasts { get; private set; } = new List<Common.Models.WeatherForecast>();
         public Guid? RequestId { get; set; }
         public Uri ResponseAddress { get; set; } = null!;

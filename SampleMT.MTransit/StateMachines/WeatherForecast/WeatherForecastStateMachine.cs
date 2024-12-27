@@ -42,8 +42,12 @@ namespace SampleMT.MTransit.StateMachines.WeatherForecast
                 When(this.IGeneratedForecastMessageEvent)
                 .Then(x =>
                 {
+                    this.logger.LogInformation($"Received '{typeof(IGeneratedForecastMessage).Name}' with JobId of '{x.Message.JobId}' for CorrelationId of '{x.CorrelationId}'");
+
                     var msg = x.Message;
                     var forecast = new Common.Models.WeatherForecast(msg.Date, msg.TemperatureC, msg.Summary);
+
+                    x.Saga.JobsList[msg.JobId] = true;
 
                     x.Saga.WeatherForecasts.Add(forecast);
                 })
@@ -60,7 +64,7 @@ namespace SampleMT.MTransit.StateMachines.WeatherForecast
                     })
                     .Then(x =>
                     {
-                        this.logger.LogInformation("Responded to request");
+                        this.logger.LogInformation($"Responded to request for CorrelationId of '{x.CorrelationId}'");
                     })
                     .TransitionTo(this.Final)
                 )
@@ -88,6 +92,10 @@ namespace SampleMT.MTransit.StateMachines.WeatherForecast
             var tasks = Enumerable.Range(1, context.Saga.Days).Select(async idx =>
             {
                 var jobId = NewId.NextGuid();
+
+                context.Saga.JobsList.Add(jobId, false);
+
+                this.logger.LogInformation($"Sending '{typeof(IGetForecastMessage).Name}' with JobId of '{jobId}' for CorrelationId of '{context.CorrelationId}'");
 
                 await context.Publish<SubmitJob<IGetForecastMessage>>(new
                 {

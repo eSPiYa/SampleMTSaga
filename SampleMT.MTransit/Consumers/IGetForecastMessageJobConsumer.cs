@@ -38,6 +38,8 @@ namespace SampleMT.MTransit.Consumers
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             });
+
+            this.logger.LogInformation($"Sending '{typeof(IGeneratedForecastMessage).Name}' with JobId of '{context.JobId}' for CorrelationId of '{context.CorrelationId}'");
         }
     }
 }
